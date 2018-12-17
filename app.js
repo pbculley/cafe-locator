@@ -4,6 +4,7 @@ var yelp = require("yelp-fusion");
 var request = require("request");
 var bodyParser = require("body-parser");
 
+app.use(express.static('/public'))
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 
@@ -12,12 +13,15 @@ var cafes = [
 		{name: "cafe 1", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHHrx8cbwNmEh0-NxIPkeqk7V6pAZmEEu326pDQ9MoaOCEa1Tw"},
 		{name: "cafe 1", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsY4jF771Oi5fzXJpDe__03avc2sS5y22c2Q57UkOT5eDFkPPW"}
 ];
+
+var location = cafes[0].image;
+
 let client = yelp.client("wvgTbG0vFrnfDXLftB1LhfurlDZmbsl3WhvaPaJEd0lAeUDnbqiT1kyilHsFw88S4U28E4Ywlu_vLm7PnUqcq_P4zl6aKB5SL14cMHq3GfVX9gIe25WXOho8srMEXHYx")
 
 
 // First route will be for landing pg
 app.get("/", function(req,res){
-	res.render("landing");
+	res.render("landing",{location:location});
 });
 
 app.post("/", function(req, res){
@@ -26,16 +30,17 @@ app.post("/", function(req, res){
   location: req.body.location, 
   limit: 20 
 }).then(response => {
-	let businesses = response.jsonBody.businesses;
-	let result = businesses.map(foo => {
-		return foo.name;
-	})
-console.log(businesses);
+	var businesses = response.jsonBody.businesses;
+	var locationArr = []; 
+	location = businesses.map(foo => {
+		locationArr.push(foo.image_url); 
+			});
+	console.log(locationArr);
+	res.render('search', {locationArr: locationArr});
 }).catch(e => {
   console.log(e);
 });
-});
-
+})
 
 app.get("/cafes", function(req,res){
 	res.render("cafes", {cafes:cafes});

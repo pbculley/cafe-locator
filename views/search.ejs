@@ -1,0 +1,14 @@
+<%include partials/header.ejs%>
+<h1>search results</h1>
+
+<div class="row">	
+	<%for(var i = 0; i < locationArr.length; i++){%>
+	<div class="col-xs-3">
+		<div class="thumbnail">
+			<img src="<%=locationArr[i]%>">
+		</div>
+	</div>
+	<%}%>
+</div>
+
+<%include partials/footer.ejs%>
