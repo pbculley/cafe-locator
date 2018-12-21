@@ -1,10 +1,11 @@
 var express = require("express");
 var app = express(); 
+var path = require("path"); 
 var yelp = require("yelp-fusion");
 var request = require("request");
 var bodyParser = require("body-parser");
 
-app.use(express.static('/public'))
+app.use(express.static(__dirname + '/public')); 
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 
@@ -28,7 +29,7 @@ app.post("/", function(req, res){
  client.search({
   term: 'food',
   location: req.body.location, 
-  limit: 20 
+  limit: 12
 }).then(response => {
 	var businesses = response.jsonBody.businesses;
 	var locationArr = []; 
