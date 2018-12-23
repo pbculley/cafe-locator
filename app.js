@@ -17,7 +17,7 @@ var cafes = [
 
 var location = cafes[0].image;
 
-let client = yelp.client("wvgTbG0vFrnfDXLftB1LhfurlDZmbsl3WhvaPaJEd0lAeUDnbqiT1kyilHsFw88S4U28E4Ywlu_vLm7PnUqcq_P4zl6aKB5SL14cMHq3GfVX9gIe25WXOho8srMEXHYx")
+let client = yelp.client("hiddenfromview")
 
 
 // First route will be for landing pg
@@ -27,17 +27,28 @@ app.get("/", function(req,res){
 
 app.post("/", function(req, res){
  client.search({
-  term: 'food',
+  term: 'punk',
   location: req.body.location, 
-  limit: 12
+  limit: 30
 }).then(response => {
 	var businesses = response.jsonBody.businesses;
+	
 	var locationArr = []; 
-	location = businesses.map(foo => {
+	var coNameArr = []; 
+	var location = businesses.map(foo => {
 		locationArr.push(foo.image_url); 
 			});
-	console.log(locationArr);
-	res.render('search', {locationArr: locationArr});
+	var coName = businesses.map(el => {
+		coNameArr.push(el.name);
+	});
+	var searchResults = {
+		name: coNameArr
+	}
+	console.log(searchResults.name[0]);
+	res.render('search', {
+		locationArr:locationArr,
+		searchResults:searchResults
+	});
 }).catch(e => {
   console.log(e);
 });

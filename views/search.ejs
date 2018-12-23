@@ -1,15 +1,24 @@
 <%include partials/header.ejs%>
+
 <h1>search results</h1>
-<div class="container">
+
+<div class="col-xs-12">
+<div id="map">
+</div>
+</div>
+
+
 <div class="row-display-flex">	
 	<%for(var i = 0; i < locationArr.length; i++){%>
-	<div class="col-md-3 col-sm-4 col-xs-12">
-		<div class="thumbnail">
-			<img src="<%=locationArr[i]%>">
+	<div class="col-sm-6 col-xs-12">
+		<div class="results">
+			<h2><%=searchResults.name[i]%></h2>
+			<div class="container-imgs">
+				<img src="<%=locationArr[i]%>">
+			</div>
 		</div>
 	</div>
 	<%}%>
-</div>
 </div>
 
 <%include partials/footer.ejs%>
