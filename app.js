@@ -17,7 +17,7 @@ var cafes = [
 
 var location = cafes[0].image;
 
-let client = yelp.client("hiddenfromview")
+let client = yelp.client("apikeyhere")
 
 
 // First route will be for landing pg
@@ -32,28 +32,41 @@ app.post("/", function(req, res){
   limit: 30
 }).then(response => {
 	var businesses = response.jsonBody.businesses;
-	
-	var locationArr = []; 
+	var imgArr = []; 
 	var coNameArr = []; 
-	var location = businesses.map(foo => {
-		locationArr.push(foo.image_url); 
+	var locationArr = []; 
+	var displayPhone = [];
+
+	var imgs = businesses.map(foo => {
+		imgArr.push(foo.image_url); 
 			});
 	var coName = businesses.map(el => {
 		coNameArr.push(el.name);
 	});
+
+
 	var searchResults = {
-		name: coNameArr
+		name: coNameArr,
+		location: locationArr, 
+		imgs: imgArr,
+		displayPhone: displayPhone
 	}
-	console.log(searchResults.name[0]);
+
+	for(var x = 0; x < businesses.length; x++){
+		locationArr.push(businesses[x].location['display_address']); 
+		displayPhone.push(businesses[x].display_phone);
+		console.log(displayPhone);
+	}
+
 	res.render('search', {
-		locationArr:locationArr,
+		imgArr:imgArr,
 		searchResults:searchResults
 	});
+
 }).catch(e => {
   console.log(e);
 });
 })
-
 app.get("/cafes", function(req,res){
 	res.render("cafes", {cafes:cafes});
 });

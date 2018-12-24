@@ -9,16 +9,22 @@
 
 
 <div class="row-display-flex">	
-	<%for(var i = 0; i < locationArr.length; i++){%>
-	<div class="col-sm-6 col-xs-12">
+	<%for(var i = 0; i < imgArr.length; i++){%>
+	<div class="col-md-6 col-xs-12">
 		<div class="results">
 			<h2><%=searchResults.name[i]%></h2>
+			<p><%=searchResults.location[i][0]%>
+				<br>
+					<%=searchResults.location[i][1]%>
+				<br>
+					<%=searchResults.displayPhone[i]%>
+			</p>
 			<div class="container-imgs">
-				<img src="<%=locationArr[i]%>">
+				<img src="<%=imgArr[i]%>">
 			</div>
 		</div>
 	</div>
 	<%}%>
-</div>
+</div
 
 <%include partials/footer.ejs%>

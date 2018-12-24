@@ -1,0 +1,10 @@
+body {
+	background-color: black;
+	background-image: url("/landingpic.jpg");
+	background-size: cover;
+}
+
+form {
+	text-align: center; 
+	padding-top: 10%;
+}
