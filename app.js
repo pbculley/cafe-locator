@@ -17,7 +17,7 @@ var cafes = [
 
 var location = cafes[0].image;
 
-let client = yelp.client("apikeyhere")
+let client = yelp.client("wvgTbG0vFrnfDXLftB1LhfurlDZmbsl3WhvaPaJEd0lAeUDnbqiT1kyilHsFw88S4U28E4Ywlu_vLm7PnUqcq_P4zl6aKB5SL14cMHq3GfVX9gIe25WXOho8srMEXHYx")
 
 
 // First route will be for landing pg
@@ -51,18 +51,15 @@ app.post("/", function(req, res){
 		imgs: imgArr,
 		displayPhone: displayPhone
 	}
-
 	for(var x = 0; x < businesses.length; x++){
 		locationArr.push(businesses[x].location['display_address']); 
 		displayPhone.push(businesses[x].display_phone);
-		console.log(displayPhone);
 	}
-
 	res.render('search', {
 		imgArr:imgArr,
 		searchResults:searchResults
 	});
-
+	console.log(businesses);
 }).catch(e => {
   console.log(e);
 });

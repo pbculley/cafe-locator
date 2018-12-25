@@ -29,6 +29,8 @@ p {
 	overflow: hidden;
 }
 .container-imgs > img {
+	overflow: hidden;
+	border-radius: 5px;
 	max-width: 100%;
 }
 
