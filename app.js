@@ -17,10 +17,8 @@ var cafes = [
 
 var location = cafes[0].image;
 
-let client = yelp.client("wvgTbG0vFrnfDXLftB1LhfurlDZmbsl3WhvaPaJEd0lAeUDnbqiT1kyilHsFw88S4U28E4Ywlu_vLm7PnUqcq_P4zl6aKB5SL14cMHq3GfVX9gIe25WXOho8srMEXHYx")
+let client = yelp.client("wvgTbG0vFrnfDXLftB1LhfurlDZmbsl3WhvaPaJEd0lAeUDnbqiT1kyilHsFw88S4U28E4Ywlu_vLm7PnUqcq_P4zl6aKB5SL14cMHq3GfVX9gIe25WXOho8srMEXHYx"); 
 
-
-// First route will be for landing pg
 app.get("/", function(req,res){
 	res.render("landing",{location:location});
 });
@@ -36,34 +34,38 @@ app.post("/", function(req, res){
 	var coNameArr = []; 
 	var locationArr = []; 
 	var displayPhone = [];
-
 	var imgs = businesses.map(foo => {
 		imgArr.push(foo.image_url); 
 			});
 	var coName = businesses.map(el => {
 		coNameArr.push(el.name);
 	});
-
-
 	var searchResults = {
 		name: coNameArr,
 		location: locationArr, 
 		imgs: imgArr,
 		displayPhone: displayPhone
 	}
+	
 	for(var x = 0; x < businesses.length; x++){
+		var id = businesses[x].id; 
 		locationArr.push(businesses[x].location['display_address']); 
 		displayPhone.push(businesses[x].display_phone);
-	}
+		
+	client.business(id).then(response => {
+
+		console.log(response.jsonBody);
+	})}
+
 	res.render('search', {
 		imgArr:imgArr,
 		searchResults:searchResults
 	});
-	console.log(businesses);
 }).catch(e => {
   console.log(e);
 });
-})
+});
+
 app.get("/cafes", function(req,res){
 	res.render("cafes", {cafes:cafes});
 });
@@ -74,11 +76,16 @@ app.post("/cafes", function(req,res){
 		name: name, 
 		image: image
 	}
-})
+}
+)
+
 app.get("/cafes/new", function(req,res){
 	res.render("new.ejs")
 })
 app.listen(3000);
+
+
+	
 
 
 
