@@ -27,7 +27,7 @@ app.post("/", function(req, res){
  client.search({
   term: 'punk',
   location: req.body.location, 
-  limit: 30
+  limit: 10
 }).then(response => {
 	var businesses = response.jsonBody.businesses;
 	var imgArr = []; 
@@ -44,18 +44,21 @@ app.post("/", function(req, res){
 		name: coNameArr,
 		location: locationArr, 
 		imgs: imgArr,
-		displayPhone: displayPhone
+		displayPhone: displayPhone,
 	}
-	
+	var idArray = [];  
+	var id = businesses.forEach(el => {
+		idArray.push(el.id); 
+	});
+	var delay = .5 * 50;
 	for(var x = 0; x < businesses.length; x++){
-		var id = businesses[x].id; 
 		locationArr.push(businesses[x].location['display_address']); 
 		displayPhone.push(businesses[x].display_phone);
-		
-	client.business(id).then(response => {
-
-		console.log(response.jsonBody);
-	})}
+		setTimeout(function(x){
+			client.business(idArray[x]).then(response => {
+			console.log(response.jsonBody.hours);
+		});
+	},delay*x,x)}
 
 	res.render('search', {
 		imgArr:imgArr,
@@ -86,6 +89,13 @@ app.listen(3000);
 
 
 	
+
+
+
+
+
+	
+
 
 
 
