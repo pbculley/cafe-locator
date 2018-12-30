@@ -50,15 +50,47 @@ app.post("/", function(req, res){
 	var id = businesses.forEach(el => {
 		idArray.push(el.id); 
 	});
-	var delay = .5 * 50;
+	var delay = 1 * 1000;
 	for(var x = 0; x < businesses.length; x++){
 		locationArr.push(businesses[x].location['display_address']); 
 		displayPhone.push(businesses[x].display_phone);
 		setTimeout(function(x){
+			var openHours;
 			client.business(idArray[x]).then(response => {
-			console.log(response.jsonBody.hours);
+			var hours = response.jsonBody.hours.map(el => {
+				return el.open;
+			});
+			// console.log(hours);
+
+			openHours = hours.map(lo => {
+				return lo.map(min => {
+					console.log(min.start);
+				})
+				var start = Number(lo[0]['start']); 
+				var end = Number(lo[0]['end']); 
+			
+				
+
+				function findTime(x){
+					var pm = "" + (x - 1200);
+					var am = "" + x; 
+					if(x == 1200){
+						return "12:00 p.m"; 
+					}
+					if( x >= 1200){
+					return pm.replace(/00$/, ":") + pm.slice(-2) + " p.m";
+					}
+					return am.replace(/00$/, ":") + am.slice(-2) + " a.m.";
+				}
+				return findTime(start) + " - " + findTime(end);
+			}); 
+
+
+
+
 		});
-	},delay*x,x)}
+			console.log(openHours);
+		},delay*x,x)}
 
 	res.render('search', {
 		imgArr:imgArr,
