@@ -32,69 +32,74 @@ app.post("/", function(req, res){
 	var businesses = response.jsonBody.businesses;
 	var imgArr = []; 
 	var coNameArr = []; 
-	var locationArr = []; 
-	var displayPhone = [];
-	var imgs = businesses.map(foo => {
-		imgArr.push(foo.image_url); 
-			});
-	var coName = businesses.map(el => {
-		coNameArr.push(el.name);
-	});
-	var searchResults = {
-		name: coNameArr,
-		location: locationArr, 
-		imgs: imgArr,
-		displayPhone: displayPhone,
-	}
+	var hourArr = []; 
 	var idArray = [];  
+	var busHours =  [];
+	var openHours; 
 	var id = businesses.forEach(el => {
 		idArray.push(el.id); 
-	});
+		});
+	var imgs = businesses.map(foo => {
+		imgArr.push(foo.image_url); 
+		});
+	var coName = businesses.map(el => {
+		coNameArr.push(el.name);
+		});
+	var searchResults = {
+		name: coNameArr,
+		location: [], 
+		imgs: imgArr,
+		displayPhone: [],
+		hour: hourArr
+	}
 	var delay = 1 * 1000;
 	for(var x = 0; x < businesses.length; x++){
-		locationArr.push(businesses[x].location['display_address']); 
-		displayPhone.push(businesses[x].display_phone);
+		searchResults.location.push(businesses[x].location['display_address']); 
+		searchResults.displayPhone.push(businesses[x].display_phone);
+
 		setTimeout(function(x){
-			var openHours;
 			client.business(idArray[x]).then(response => {
 			var hours = response.jsonBody.hours.map(el => {
 				return el.open;
 			});
-			// console.log(hours);
-
 			openHours = hours.map(lo => {
-				return lo.map(min => {
-					console.log(min.start);
-				})
-				var start = Number(lo[0]['start']); 
-				var end = Number(lo[0]['end']); 
-			
-				
+				for(var x = 0; x < lo.length; x++){
+					return lo.map(hrs => {
+						var start = Number(hrs.start); 
+						var end = Number(hrs.end);
 
-				function findTime(x){
-					var pm = "" + (x - 1200);
-					var am = "" + x; 
-					if(x == 1200){
-						return "12:00 p.m"; 
-					}
-					if( x >= 1200){
-					return pm.replace(/00$/, ":") + pm.slice(-2) + " p.m";
-					}
-					return am.replace(/00$/, ":") + am.slice(-2) + " a.m.";
+						function findDay(y){
+						var dayArr = ["Mon", "Tues", "Wed", "Thurs", "Fri", "Sat", "Sun",]; 
+						return dayArr[y]; 
+						 }
+
+						function findTime(x){
+						var pm = "" + (x - 1200);
+						var am = "" + x; 
+						if(x == 1200){
+							return "12:00 p.m"; 
+						}
+						if( x >= 1200){
+							return pm.replace(/00$/, ":") + pm.slice(-2) + " p.m";
+						}
+							return am.replace(/00$/, ":") + am.slice(-2) + " a.m.";
+						}
+
+					hourArr.push(findDay(hrs.day) + " " + findTime(hrs.start) + " - " + findTime(hrs.end)); 
+					}); 
 				}
-				return findTime(start) + " - " + findTime(end);
-			}); 
+				return hourArr; 
+			});	
 
-
-
-
-		});
-			console.log(openHours);
-		},delay*x,x)}
-
+			// End of openHours
+		}); console.log(hourArr);
+			// end of for-loop 
+		},delay*x,x)}			 
+	// end of setTimeout
 	res.render('search', {
 		imgArr:imgArr,
-		searchResults:searchResults
+		searchResults:searchResults,
+		hours: hourArr
 	});
 }).catch(e => {
   console.log(e);
