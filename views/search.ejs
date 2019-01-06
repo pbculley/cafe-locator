@@ -7,9 +7,10 @@
 </div>
 </div>
 
+<h1><%=hour%></h1>
 
 <div class="row-display-flex">	
-	<%for(var i = 0; i < imgArr.length; i++){%>
+	<%for(var i = 0; i < searchResults.location.length; i++){%>
 	<div class="col-md-6 col-xs-12">
 		<div class="results">
 			<h2><%=searchResults.name[i]%></h2>
@@ -19,10 +20,8 @@
 				<br>
 					<%=searchResults.displayPhone[i]%>
 				<br>
-					<%=searchResults.hour[i]%>
-				<%for(var x = 0; x < imgArr.length; x++){%>
-
-				<%}%>
+				<%=hour%>
+				
 			</p>
 			<div class="container-imgs">
 				<img src="<%=imgArr[i]%>">
